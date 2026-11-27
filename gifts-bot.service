@@ -1,0 +1,16 @@
+[Unit]
+Description=Telegram Gifts Monitor Public Bot & Broadcaster (Bot API)
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/telegram-gifts-monitor
+ExecStart=/opt/telegram-gifts-monitor/venv/bin/python bot.py
+Restart=always
+RestartSec=5
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONIOENCODING=utf-8
+
+[Install]
+WantedBy=multi-user.target
