@@ -1,0 +1,39 @@
+
+name: SWOP ACCESS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swop-access
+  cancel-in-progress: true
+
+jobs:
+  access-bot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install "aiogram>=3.15,<4"
+
+      - name: Start SWOP Access
+        env:
+          ACCESS_BOT_TOKEN: ${{ secrets.ACCESS_BOT_TOKEN }}
+        run: |
+          if [ -z "$ACCESS_BOT_TOKEN" ]; then
+            echo "ACCESS_BOT_TOKEN missing"
+            exit 1
+          fi
+          python -u access_bot.py
