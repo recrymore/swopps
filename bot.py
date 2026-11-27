@@ -112,21 +112,14 @@ class ConsoleLoggingMiddleware(BaseMiddleware):
 
 # ------------------ Функции генерации главного меню и клавиатур ------------------
 
+
 def get_main_menu_text(sub: Subscriber, trial_msg: str = "") -> str:
-    status_icon = "🟢 Включены" if sub.active else "🔴 Приостановлены"
     return (
-        "👋 <b>Добро пожаловать в сервис мониторинга подарков Telegram!</b>\n\n"
-        "Я отслеживаю появление новых коллекционных подарков (Collectible Gifts) "
-        "на маркете Stars и уникальных улучшений (NFT Black и Оникс Black).\n"
-        f"{trial_msg}\n"
-        "👤 <b>Ваш статус:</b>\n"
-        f"• Уведомления: <b>{status_icon}</b>\n"
-        f"• Режим: <b>{get_mode_title(sub.mode)}</b>\n"
-        f"• Фильтр апгрейдов: <b>{get_upgrade_filter_title(getattr(sub, 'upgrade_filter', 'all'))}</b>\n"
-        f"• Диапазон цен: <b>{sub.min_price} – {sub.max_price} ★</b>\n"
-        f"• Маркет: {sub.get_status_text('market')}\n"
-        f"• Улучшения: {sub.get_status_text('upgrades')}\n\n"
-        "<i>Используйте интерактивные кнопки меню ниже:</i>"
+        "🎁 <b>Добро пожаловать в SWOP Tracker.</b>\n\n"
+        "Автоматический мониторинг NFT-подарков Telegram.\n\n"
+        "📡 Все новые лоты публикуются в закрытой группе.\n\n"
+        "💎 <b>Доступ полностью бесплатный!</b>\n\n"
+        "⬇️ Выберите действие:"
     )
 
 
