@@ -1,0 +1,93 @@
+
+name: SWOP - Test All Bots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-bots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check SWOP Bots
+        env:
+          LOW_BOT_TOKEN: ${{ secrets.LOW_BOT_TOKEN }}
+          MEDIUM_BOT_TOKEN: ${{ secrets.MEDIUM_BOT_TOKEN }}
+          PREMIUM_BOT_TOKEN: ${{ secrets.PREMIUM_BOT_TOKEN }}
+          ELITE_BOT_TOKEN: ${{ secrets.ELITE_BOT_TOKEN }}
+          EXCLUSIVE_BOT_TOKEN: ${{ secrets.EXCLUSIVE_BOT_TOKEN }}
+
+        run: |
+          python3 - <<'PY'
+          import os
+          import json
+          import time
+          import urllib.request
+          import urllib.error
+
+          GROUP_ID = -1006051447834
+
+          bots = [
+              ("SWOP LOW", "LOW_BOT_TOKEN", 3, "0-10 TON"),
+              ("SWOP MEDIUM", "MEDIUM_BOT_TOKEN", 2, "10-20 TON"),
+              ("SWOP PREMIUM", "PREMIUM_BOT_TOKEN", 8, "20-50 TON"),
+              ("SWOP ELITE", "ELITE_BOT_TOKEN", 9, "50-100 TON"),
+              ("SWOP EXCLUSIVE", "EXCLUSIVE_BOT_TOKEN", 10, "100+ TON"),
+          ]
+
+          failed = False
+
+          for name, secret, topic, price in bots:
+              token = os.getenv(secret)
+
+              if not token:
+                  print(f"ERROR: {name}: Secret missing")
+                  failed = True
+                  continue
+
+              data = {
+                  "chat_id": GROUP_ID,
+                  "message_thread_id": topic,
+                  "text": (
+                      f"💎 {name}\n\n"
+                      f"💰 Диапазон: {price}\n"
+                      "🟢 Статус: ONLINE\n"
+                      "✅ Тест подключения"
+                  )
+              }
+
+              try:
+                  request = urllib.request.Request(
+                      f"https://api.telegram.org/bot{token}/sendMessage",
+                      data=json.dumps(data).encode(),
+                      headers={"Content-Type": "application/json"}
+                  )
+
+                  with urllib.request.urlopen(request, timeout=15) as response:
+                      result = json.load(response)
+
+                  if result.get("ok"):
+                      print(f"OK: {name}")
+                  else:
+                      print(f"ERROR: {name}")
+                      failed = True
+
+              except urllib.error.HTTPError as e:
+                  print(f"ERROR: {name}: HTTP {e.code}")
+                  failed = True
+
+              except Exception as e:
+                  print(f"ERROR: {name}: {type(e).__name__}")
+                  failed = True
+
+              time.sleep(2)
+
+          if failed:
+              raise SystemExit(1)
+
+          print("ALL 5 BOTS CONNECTED")
+          PY
