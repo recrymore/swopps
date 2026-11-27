@@ -329,3 +329,30 @@ def load_config(config_path: str = "config.yaml") -> AppConfig:
         logger.warning(f"Файл {config_path} не найден, используются настройки по умолчанию")
 
     return config
+
+
+# SWOP TRACKER — PRIVATE GROUP
+
+TRACKER_GROUP_ID = -1006051447834
+
+TRACKER_TOPICS = {
+    "news": 1,
+    "low": 3,
+    "medium": 2,
+    "premium": 8,
+    "elite": 9,
+    "exclusive": 10,
+}
+
+# Price ranges in TON
+
+TRACKER_PRICE_RANGES = [
+    (0, 10, "low"),
+    (10, 20, "medium"),
+    (20, 50, "premium"),
+    (50, 100, "elite"),
+    (100, float("inf"), "exclusive"),
+]
+
+FREE_ACCESS = True
+RESERVATION_MINUTES = 15
