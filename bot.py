@@ -127,20 +127,16 @@ class CustomTemplateState(StatesGroup):
     waiting_for_template = State()
 
 
+
 def get_main_menu_keyboard(sub: Subscriber) -> types.InlineKeyboardMarkup:
     builder = InlineKeyboardBuilder()
-    builder.button(text="💎 Тарифы и подписка", callback_data="menu:tariffs")
-    builder.button(text="👤 Мой профиль", callback_data="menu:profile")
-    builder.button(text="⚙️ Режим уведомлений", callback_data="menu:mode")
-    builder.button(text="💰 Диапазон цен", callback_data="menu:price")
-    builder.button(text="📋 Занятые лоты", callback_data="menu:my")
-    builder.button(text="📝 Шаблон сообщения", callback_data="menu:template")
 
-    toggle_text = "⏸️ Приостановить" if sub.active else "▶️ Возобновить"
-    builder.button(text=toggle_text, callback_data="menu:toggle_active")
-    builder.button(text="ℹ️ Справка", callback_data="menu:help")
+    builder.button(text="💎 Получить доступ", callback_data="menu:access")
+    builder.button(text="👥 Пригласить друга", callback_data="menu:referral")
+    builder.button(text="👤 Профиль", callback_data="menu:profile")
+    builder.button(text="ℹ️ Информация", callback_data="menu:help")
 
-    builder.adjust(2, 2, 2, 2)
+    builder.adjust(1, 1, 2)
     return builder.as_markup()
 
 
